@@ -23,6 +23,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Passport middleware
 app.use(passport.initialize());
 
+// Define Routes
+app.use("/room", require("./routes/room"));
 // Serve static assets in productioncd
 if (process.env.NODE_ENV === "production") {
   // Set static folder
