@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
-const DepositSchema = new mongoose.Schema({
-  address: {
+const RoomSchema = new mongoose.Schema({
+  creator: {
     type: String,
     required: true,
   },
-  method: {
+  nftinfo: {
     type: String,
     required: true,
   },
@@ -18,4 +18,4 @@ const DepositSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("deposit", DepositSchema);
+module.exports = mongoose.model("room", RoomSchema);
