@@ -5,13 +5,9 @@ const RoomSchema = new mongoose.Schema({
     required: true,
   },
   nftinfo: {
-    type: String,
-    required: true,
+    type: Array,
   },
-  amount: {
-    type: Number,
-    required: true,
-  },
+
   date: {
     type: Date,
     default: Date.now,
