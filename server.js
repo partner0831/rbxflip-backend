@@ -4,7 +4,7 @@ const cors = require("cors");
 const passport = require("passport");
 const path = require("path");
 const connectDB = require("./config/db");
-const { create } = require("./routes/create");
+const { createRoom, joinRoom, readyEvent } = require("./routes/create");
 require("dotenv").config();
 const app = express();
 
@@ -44,12 +44,14 @@ const io = socketio(server);
 const onlineUsers = {};
 try {
   io.on("connection", (socket) => {
-    console.log("new client connected");
+    console.log("new client connected", socket.handshake.query.userId);
     // Get connected user id
     const userId = socket.handshake.query.userId;
     // Set user as online
     onlineUsers[userId] = socket.id;
-    create(socket, onlineUsers);
+    createRoom(socket);
+    joinRoom(socket);
+    readyEvent(socket);
     socket.on("user_logout", (item) => {
       socket.disconnect();
     });

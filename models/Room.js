@@ -4,10 +4,28 @@ const RoomSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  visitor: {
+    type: String,
+  },
   nftinfo: {
     type: Array,
   },
-
+  visitinfo: {
+    type: Array,
+  },
+  creatorReady: {
+    type: Boolean,
+    require: true,
+    default: false,
+  },
+  visitorReady: {
+    type: Boolean,
+    require: true,
+    default: false,
+  },
+  winner: {
+    type: String,
+  },
   date: {
     type: Date,
     default: Date.now,
