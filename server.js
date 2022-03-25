@@ -15,7 +15,11 @@ connectDB();
 // app.use(cors());
 app.use(
   cors({
-    origin: ["https://www.section.io", "http://localhost:3000"],
+    origin: [
+      "https://www.section.io",
+      "http://192.168.112.143:3000",
+      "http://localhost:3000",
+    ],
   })
 );
 app.use(express.json());
@@ -56,7 +60,6 @@ try {
       socket.disconnect();
     });
     socket.on("disconnect", () => {
-      let disconnectedUserId = null;
       // Remove disconnected user from online users
       for (prop in onlineUsers) {
         if (onlineUsers[prop] === socket.id) {
