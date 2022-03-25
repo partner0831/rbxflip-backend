@@ -226,4 +226,23 @@ const readyEvent = async (socket) => {
     }
   });
 };
-module.exports = { createRoom, joinRoom, readyEvent };
+
+const chooseWinner = async (socket) => {
+  socket.on("choose_winner", async (item) => {
+    Room.findByIdAndUpdate(
+      item.roomId,
+      { $set: { choose: true } },
+      { new: true }
+    )
+      .then((item) => {
+        socket.emit("winner_success", { item, msg: "success" });
+        socket.broadcast.emit("winner_success", { item, msg: "success" });
+      })
+      .catch((err) => {
+        console.log(err);
+        socket.emit("winner_failed", { err, msg: "failed" });
+      });
+  });
+};
+
+module.exports = { createRoom, joinRoom, readyEvent, chooseWinner };

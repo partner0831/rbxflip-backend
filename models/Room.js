@@ -30,6 +30,11 @@ const RoomSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  choose: {
+    type: Boolean,
+    require: true,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("room", RoomSchema);

@@ -48,7 +48,6 @@ const io = socketio(server);
 const onlineUsers = {};
 try {
   io.on("connection", (socket) => {
-    console.log("new client connected", socket.handshake.query.userId);
     // Get connected user id
     const userId = socket.handshake.query.userId;
     // Set user as online
