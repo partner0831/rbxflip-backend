@@ -13,15 +13,7 @@ connectDB();
 
 // Init Middleware
 // app.use(cors());
-app.use(
-  cors({
-    origin: [
-      "https://www.section.io",
-      "http://192.168.112.143:3000",
-      "http://localhost:3000",
-    ],
-  })
-);
+app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
