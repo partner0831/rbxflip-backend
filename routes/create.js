@@ -245,4 +245,61 @@ const chooseWinner = async (socket) => {
   });
 };
 
-module.exports = { createRoom, joinRoom, readyEvent, chooseWinner };
+const cancelRoom = async (socket, address) => {
+  Room.find({
+    $or: [{ creator: address }, { visitor: address }],
+  })
+    .then((item) => {
+      item.map((data) => {
+        if (!(data.creatorReady && data.visitorReady)) {
+          // console.log(data);
+          if (data.creator === address) {
+            Room.findByIdAndRemove(data._id)
+              .then((item) => {
+                socket.emit("cancel_success", { item, msg: "success" });
+                socket.broadcast.emit("cancel_success", {
+                  item,
+                  msg: "success",
+                });
+              })
+              .catch((err) => {
+                console.log(err);
+                socket.emit("cancel_failed", { err, msg: "failed" });
+              });
+          } else if (data.visitor === address) {
+            Room.findByIdAndUpdate(
+              data._id,
+              { $set: { visitor: "" } },
+              { new: true }
+            )
+              .then((item) => {
+                socket.emit("cancel_success", { item, msg: "success" });
+                socket.broadcast.emit("cancel_success", {
+                  item,
+                  msg: "success",
+                });
+              })
+              .catch((err) => {
+                console.log(err);
+                socket.emit("cancel_failed", { err, msg: "failed" });
+              });
+          }
+        }
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      socket.emit("selectRoom_failed", { err, msg: "failed" });
+    });
+  //   Room.findByIdAndRemove(item.roomId)
+  //     .then((item) => {
+  //       socket.emit("cancel_success", { item, msg: "success" });
+  //       socket.broadcast.emit("cancel_success", { item, msg: "success" });
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       socket.emit("cancel_failed", { err, msg: "failed" });
+  //     });
+};
+
+module.exports = { createRoom, joinRoom, readyEvent, chooseWinner, cancelRoom };

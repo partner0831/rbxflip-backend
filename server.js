@@ -4,7 +4,12 @@ const cors = require("cors");
 const passport = require("passport");
 const path = require("path");
 const connectDB = require("./config/db");
-const { createRoom, joinRoom, readyEvent } = require("./routes/create");
+const {
+  createRoom,
+  joinRoom,
+  readyEvent,
+  cancelRoom,
+} = require("./routes/create");
 require("dotenv").config();
 const app = express();
 
@@ -47,10 +52,12 @@ try {
     createRoom(socket);
     joinRoom(socket);
     readyEvent(socket);
+
     socket.on("user_logout", (item) => {
       socket.disconnect();
     });
     socket.on("disconnect", () => {
+      cancelRoom(socket, userId);
       // Remove disconnected user from online users
       for (prop in onlineUsers) {
         if (onlineUsers[prop] === socket.id) {
